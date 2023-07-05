@@ -2,6 +2,7 @@ import os
 from flask import Flask, request
 import telebot
 from helper.log import log
+from helper.api import latest
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -30,6 +31,11 @@ def help_command(message):
     response_text += "/start - Start the bot.\n"
     response_text += "/help - Show this help message.\n"
     bot.reply_to(message, response_text)
+
+@bot.message_handler(commands=['new'])
+def handle_start(message):
+    latest = latest()
+    bot.reply_to(message, )
 
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)

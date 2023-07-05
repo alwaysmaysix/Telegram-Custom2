@@ -3,3 +3,4 @@ flask
 gunicorn
 telegraph
 requests
+beautifulsoup4
