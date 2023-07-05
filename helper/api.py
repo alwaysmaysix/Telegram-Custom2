@@ -8,7 +8,7 @@ def get_soup():
     print(url)
     response = requests.get(url)
     html_content = response.text
-
+    print(response.status_code)
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
     
