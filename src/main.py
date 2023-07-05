@@ -35,16 +35,19 @@ def help_command(message):
 @bot.message_handler(commands=['new'])
 def handle_start(message):
     query = message.text.split('_')
+    print(query)
     if len(query) == 1:
         page = '1'
+        print(page)
     else:
         page = query[1]
+        print(page)
     full_list = latest(page)
     for item in full_list:
         title = item['title']
         image = item['img']
         bot.send_photo(message.chat.id, image, caption = title)
-    bot.reply_to(message, f'/new_{int(page) + 1}')
+    bot.reply_to(message, f'/new_{(int(page) + 1)}')
 
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
