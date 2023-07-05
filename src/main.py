@@ -38,6 +38,7 @@ def handle_start(message):
     bot.reply_to(message, 'got it')
     for item in full_list:
         title = item['title']
+        bot.reply_to(message, title)
         image = item['img']
         bot.send_photo(message.chat.id, image, caption = title)
 
