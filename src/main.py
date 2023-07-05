@@ -35,13 +35,9 @@ def help_command(message):
 @bot.message_handler(commands=['new'])
 def handle_start(message):
     full_list = latest()
-    bot.reply_to(message, 'got it')
-    print(full_list)
     for item in full_list:
         title = item['title']
-        bot.reply_to(message, title)
         image = item['img']
-        bot.reply_to(message, image)
         bot.send_photo(message.chat.id, image, caption = title)
 
 # Handler for any other message

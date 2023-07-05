@@ -10,7 +10,6 @@ headers = {
 def get_soup():
     response = requests.get(url, headers=headers)
     html_content = response.text
-    print(response.status_code)
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
     
