@@ -7,14 +7,15 @@ headers = {
     'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/88.0.4324.150 Safari/537.36',
     'Accept-Language': 'en-US,en;q=0.9',
 }
-def get_soup():
+def get_soup(url):
     response = requests.get(url, headers=headers)
     html_content = response.text
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
     
-def latest():
-    soup = get_soup()
+def latest(num):
+    url = f"{url}page/{num}"
+    soup = get_soup(url)
     div_tags = soup.find_all('div', class_='tdb_module_loop td_module_wrap td-animation-stack td-cpt-post')
     result_list = []  # Empty list to store the information
 
