@@ -5,6 +5,7 @@ import os
 url = os.getenv('url')
 
 def get_soup():
+    print(url)
     response = requests.get(url)
     html_content = response.text
 
@@ -13,6 +14,7 @@ def get_soup():
     
 def latest():
     soup = get_soup()
+    print(soup)
     div_tags = soup.find_all('div', class_='tdb_module_loop td_module_wrap td-animation-stack td-cpt-post')
     result_list = []  # Empty list to store the information
 
