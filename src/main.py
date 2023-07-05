@@ -32,16 +32,13 @@ def help_command(message):
     response_text += "/help - Show this help message.\n"
     bot.reply_to(message, response_text)
 
-@bot.message_handler(commands=['new'])
+@bot.message_handler(func=lambda message: message.text.startswith('/new'))
 def handle_start(message):
     query = message.text.split('_')
-    print(query)
     if len(query) == 1:
         page = '1'
-        print(page)
     else:
         page = query[1]
-        print(page)
     full_list = latest(page)
     for item in full_list:
         title = item['title']
