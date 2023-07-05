@@ -36,6 +36,7 @@ def help_command(message):
 def handle_start(message):
     full_list = latest()
     bot.reply_to(message, 'got it')
+    print(full_list)
     for item in full_list:
         title = item['title']
         bot.reply_to(message, title)
