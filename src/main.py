@@ -36,7 +36,7 @@ def help_command(message):
 def handle_start(message):
     query = message.text.split('_')
     if len(query) == 1:
-        page = 1
+        page = '1'
     else:
         page = query[1]
     full_list = latest(page)
