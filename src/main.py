@@ -44,7 +44,10 @@ def handle_start(message):
         title = item['title']
         image = item['img']
         bot.send_photo(message.chat.id, image, caption = title)
-    bot.reply_to(message, f'/new_{(int(page) + 1)}')
+    try:
+        bot.reply_to(message, f'/new_{(int(page) + 1)}')
+    except:
+        bot.reply_to(message, 'Usage : /new_<number>')
 
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
