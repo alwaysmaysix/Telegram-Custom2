@@ -34,7 +34,12 @@ def help_command(message):
 
 @bot.message_handler(commands=['new'])
 def handle_start(message):
-    full_list = latest()
+    query = message.text.split('_')
+    if len(query) == 1:
+        page = 1
+    else:
+        page = query[1]
+    full_list = latest(page)
     for item in full_list:
         title = item['title']
         image = item['img']
