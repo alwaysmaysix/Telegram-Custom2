@@ -40,7 +40,14 @@ def handle_com(message):
         image = item['img']
         bot.send_photo(message.chat.id, image, caption = caption)
     
-    
+
+@bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
+def handle_singles(message):
+    url = message.text
+    parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
+    bot.reply_to(message, str(len(parts)))
+
+
 @bot.message_handler(func=lambda message: message.text.startswith('/new'))
 def handle_fn(message):
     query = message.text.split('_')
