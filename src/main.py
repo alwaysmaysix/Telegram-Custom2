@@ -45,10 +45,10 @@ def handle_com(message):
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
 def handle_singles(message):
+    return
     if message.message_id in previous_message_ids:  
          return  
     previous_message_ids.append(message.message_id)
-    
     
     url = message.text
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
