@@ -44,7 +44,7 @@ def apc():
     ratings = content.find_all('span', class_="score font-meta total_votes")
     results = []
 
-    for title, photo, rating in zip(titles, photos, rate):
+    for title, photo, rating in zip(titles, photos, ratings):
         title_dict = {}
         a_tag = title.find('a')
         if a_tag:
