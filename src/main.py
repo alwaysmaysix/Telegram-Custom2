@@ -36,7 +36,7 @@ def help_command(message):
 def handle_com(message):
     full_list = apc()
     for item in full_list:
-        caption = item['title'] + '\n' + item['link']
+        caption = item['title'] + '  ' + item['rating'] + '⭐' + '\n' + item['link']
         image = item['img']
         bot.send_photo(message.chat.id, image, caption = caption)
     

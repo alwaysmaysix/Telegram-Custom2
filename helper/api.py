@@ -41,9 +41,10 @@ def apc():
 
     titles = content.find_all('h3', class_="h5")
     photos = content.find_all('img')
+    ratings = content.find_all('span', class_="score font-meta total_votes")
     results = []
 
-    for title, photo in zip(titles, photos):
+    for title, photo, rating in zip(titles, photos, rate):
         title_dict = {}
         a_tag = title.find('a')
         if a_tag:
@@ -54,6 +55,9 @@ def apc():
 
         img = photo['data-src']
         title_dict['img'] = img
+
+        rating_text = rating.text.strip()
+        title_dict['rating'] = rating_text
 
         results.append(title_dict)
 
