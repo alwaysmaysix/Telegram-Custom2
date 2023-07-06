@@ -22,7 +22,6 @@ def telegram():
 # Handler for the '/start' command
 @bot.message_handler(commands=['start'])
 def start_command(message):
-    return
     response_text = "Hello! Welcome to this bot!\n\n"
     response_text += "For help, use the command /help."
     bot.reply_to(message, response_text)
@@ -30,7 +29,6 @@ def start_command(message):
 # Handler for the '/help' command
 @bot.message_handler(commands=['help'])
 def help_command(message):
-    return
     response_text = "Here are the available commands:\n\n"
     response_text += "/start - Start the bot.\n"
     response_text += "/help - Show this help message.\nnew_com"
@@ -38,7 +36,6 @@ def help_command(message):
 
 @bot.message_handler(commands=['com'])
 def handle_com(message):
-    return
     full_list = apc()
     for item in full_list:
         caption = item['title'] + '\n' + item['rating'] + '⭐' + '\n' + item['link'] +  '\n\nLatest Chapter\n' + item['chapter'] + '\n' + item['chapter_url']
@@ -48,7 +45,6 @@ def handle_com(message):
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
 def handle_singles(message):
-    return
     if message.message_id in previous_message_ids:  
          return  
     previous_message_ids.append(message.message_id)
@@ -93,5 +89,4 @@ def handle_fn(message):
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
-    return
     bot.reply_to(message, message.text)
