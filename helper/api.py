@@ -12,7 +12,7 @@ def get_soup(url):
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
     
-def latest(num):
+def fn_org(num):
     url = os.getenv('url')
     url = f"{url}page/{num}"
     soup = get_soup(url)
@@ -33,3 +33,28 @@ def latest(num):
                 result_list.append({"title": title, "url": link, "img": image_url})  # Append title, link, and image URL together as a dictionary to the list
 
     return result_list
+
+def apc():
+    url = os.getenv('url2')
+    soup = get_soup(url)
+    content = soup.find('div', class_='page-content-listing item-big_thumbnail')
+
+    titles = content.find_all('h3', class_="h5")
+    photos = content.find_all('img')
+    results = []
+
+    for title, photo in zip(titles, photos):
+        title_dict = {}
+        a_tag = title.find('a')
+        if a_tag:
+            title_text = a_tag.text.strip()
+            link = a_tag['href']
+            title_dict['title'] = title_text
+            title_dict['link'] = link
+
+        img = photo['data-src']
+        title_dict['img'] = img
+
+        results.append(title_dict)
+
+    return results

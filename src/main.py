@@ -2,7 +2,7 @@ import os
 from flask import Flask, request
 import telebot
 from helper.log import log
-from helper.api import latest
+from helper.api import fn_org, apc
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -32,14 +32,23 @@ def help_command(message):
     response_text += "/help - Show this help message.\n"
     bot.reply_to(message, response_text)
 
+@bot.message_handler(commands=['com'])
+def handle_com(message):
+    full_list = apc()
+    for item in full_list:
+        caption = item['title'] + '\n' + item['link']
+        image = item['img']
+        bot.send_photo(message.chat.id, image, caption = caption)
+    
+    
 @bot.message_handler(func=lambda message: message.text.startswith('/new'))
-def handle_start(message):
+def handle_fn(message):
     query = message.text.split('_')
     if len(query) == 1:
         page = '1'
     else:
         page = query[1]
-    full_list = latest(page)
+    full_list = fn_org(page)
     for item in full_list:
         title = item['title']
         image = item['img']
