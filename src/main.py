@@ -50,9 +50,14 @@ def handle_singles(message):
         bot.reply_to(message, 'Hello')
     if len(parts) == 3:
         images = get_comic(url)
+        pages = str(len(images)) + ' Pages'
+        bot.reply_to(message, pages)
         for img in images:
-            time.sleep(0.5)
-            bot.send_photo(message.chat.id, img)
+            time.sleep(0.2)
+            try:
+                bot.send_photo(message.chat.id, img)
+            except:
+                bot.send_message(message.chat.id, 'pass')
 
 @bot.message_handler(func=lambda message: message.text.startswith('/new'))
 def handle_fn(message):
