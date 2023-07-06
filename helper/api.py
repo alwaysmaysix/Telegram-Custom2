@@ -45,7 +45,7 @@ def apc():
     chapters = content.find_all('div', class_="list-chapter")
     results = []
 
-    for title, photo, rating, chapter in zip(titles, photos, rate, chapters):
+    for title, photo, rating, chapter in zip(titles, photos, ratings, chapters):
         title_dict = {}
         a_tag = title.find('a')
         if a_tag:
