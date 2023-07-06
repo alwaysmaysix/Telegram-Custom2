@@ -1,6 +1,7 @@
 import os
 from flask import Flask, request
 import telebot
+import time
 from helper.log import log
 from helper.api import fn_org, apc, get_comic
 
@@ -50,6 +51,7 @@ def handle_singles(message):
     if len(parts) == 3:
         images = get_comic(url)
         for img in images:
+            time.sleep(0.5)
             bot.send_photo(message.chat.id, img)
 
 @bot.message_handler(func=lambda message: message.text.startswith('/new'))
