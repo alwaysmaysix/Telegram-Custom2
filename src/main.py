@@ -8,6 +8,7 @@ from helper.api import fn_org, apc, get_comic
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
 bot.set_webhook(url=os.getenv('webhook_url'))
+previous_message_ids = []
 
 # Bot route to handle incoming messages
 @app.route('/bot', methods=['POST'])
@@ -30,7 +31,7 @@ def start_command(message):
 def help_command(message):
     response_text = "Here are the available commands:\n\n"
     response_text += "/start - Start the bot.\n"
-    response_text += "/help - Show this help message.\n"
+    response_text += "/help - Show this help message.\nnew_com"
     bot.reply_to(message, response_text)
 
 @bot.message_handler(commands=['com'])
@@ -44,6 +45,11 @@ def handle_com(message):
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
 def handle_singles(message):
+    if message.message_id in previous_message_ids:  
+         return  
+    previous_message_ids.append(message.message_id)
+    
+    
     url = message.text
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
     if len(parts) == 2:
@@ -52,12 +58,17 @@ def handle_singles(message):
         images = get_comic(url)
         pages = str(len(images)) + ' Pages'
         bot.reply_to(message, pages)
+        n = 0
         for img in images:
+            n+=1
             time.sleep(0.2)
             try:
                 bot.send_photo(message.chat.id, img)
             except:
                 bot.send_message(message.chat.id, 'pass')
+            if n%20 == 0:
+                bot.send_message(message.chat.id, f'{n} Pages Completed')
+        bot.send_message(message.chat.id, 'Comic Completed')
 
 @bot.message_handler(func=lambda message: message.text.startswith('/new'))
 def handle_fn(message):
