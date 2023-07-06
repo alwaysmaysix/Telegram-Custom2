@@ -70,3 +70,11 @@ def apc():
         results.append(title_dict)
 
     return results
+
+
+def get_comic(url):
+    soup = get_soup(url)
+    content = soup.find('div', class_='reading-content')
+    image_tags = content.find_all('img', class_='wp-manga-chapter-img')
+    links = [img['data-src'].strip() for img in image_tags]
+    return links

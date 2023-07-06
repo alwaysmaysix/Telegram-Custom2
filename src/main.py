@@ -2,7 +2,7 @@ import os
 from flask import Flask, request
 import telebot
 from helper.log import log
-from helper.api import fn_org, apc
+from helper.api import fn_org, apc, get_comic
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -45,8 +45,12 @@ def handle_com(message):
 def handle_singles(message):
     url = message.text
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
-    bot.reply_to(message, str(len(parts)))
-
+    if len(parts) == 2:
+        bot.reply_to(message, 'Hello')
+    if len(parts) == 3:
+        images = get_comic(url)
+        for img in images:
+            bot.send_photo(message.chat.id, img)
 
 @bot.message_handler(func=lambda message: message.text.startswith('/new'))
 def handle_fn(message):
