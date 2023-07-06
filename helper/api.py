@@ -42,9 +42,10 @@ def apc():
     titles = content.find_all('h3', class_="h5")
     photos = content.find_all('img')
     ratings = content.find_all('span', class_="score font-meta total_votes")
+    chapters = content.find_all('div', class_="list-chapter")
     results = []
 
-    for title, photo, rating in zip(titles, photos, ratings):
+    for title, photo, rating, chapter in zip(titles, photos, rate, chapters):
         title_dict = {}
         a_tag = title.find('a')
         if a_tag:
@@ -58,7 +59,14 @@ def apc():
 
         rating_text = rating.text.strip()
         title_dict['rating'] = rating_text
-
+        
+        first_chapter = chapter.find('div', class_='chapter-item')
+        if first_chapter:
+            chapter_title = first_chapter.find('span', class_='chapter font-meta').text.strip()
+            chapter_url = first_chapter.find('a', class_='btn-link')['href']
+            title_dict['chapter'] = chapter_title
+            title_dict['chapter_url'] = chapter_url
+        
         results.append(title_dict)
 
     return results
