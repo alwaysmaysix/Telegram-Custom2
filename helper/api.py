@@ -75,7 +75,7 @@ def get_comic_info(url):
     
     
 def search(query, n):
-    url = os.getenv('url') + 'page/{n}/?s=' + query + '&post_type=wp-manga&m_orderby=views'
+    url = os.getenv('url') + 'page/' + str(n) + '/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     print(url)
     soup = get_soup(url)
     results_heading = soup.find('h1', class_='h4').text.strip()
