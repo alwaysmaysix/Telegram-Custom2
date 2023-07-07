@@ -83,7 +83,7 @@ def handle_singles(message):
         bot.send_message(message.chat.id, 'Comic Completed')
 
 
-@bot.message_handler(func=lambda message: message.text.startswith('/search'))
+@bot.message_handler(func=lambda message: message.text.startswith('/s'))
 def handle_search(message):
     query = message.text.replace('/search', '').strip().replace(' ', '+')
     if query == '':
