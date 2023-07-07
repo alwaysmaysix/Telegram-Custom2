@@ -53,7 +53,7 @@ def handle_singles(message):
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
     if len(parts) == 2:
         chapters = get_comic_info(url)
-        response = ''
+        response = 'LATEST MANGA RELEASES \n\n\n'
         n = 0
         for chapter in chapters:
             n+=1
