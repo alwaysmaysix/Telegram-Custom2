@@ -91,9 +91,7 @@ def handle_search(message):
         n = int(query[0].replace('/s', ''))
     except:
         n = 1
-    bot.reply_to(message, f'{n}')
     query = '+'.join(query[1:]).strip()
-    bot.reply_to(message, query)
     if query == '':
         return
     heading, results = search(query, n)
