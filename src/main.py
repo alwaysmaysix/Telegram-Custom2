@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import fn_org, apc, get_comic
+from helper.api import fn_org, apc, get_comic, get_comic_info
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -52,7 +52,18 @@ def handle_singles(message):
     url = message.text
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
     if len(parts) == 2:
-        bot.reply_to(message, 'Hello')
+        chapters = get_comic_info(url)
+        response = ''
+        n = 0
+        for chapter in chapters:
+            n+=1
+            response += chapter['title'] + '\n' + chapter['url'] + '\n\n'
+            if n % 5 == 0:
+                bot.send_message(message.chat.id, response)
+                response = ''
+        if response != '':
+            bot.reply_to(message, response)
+            
     if len(parts) == 3:
         images = get_comic(url)
         pages = str(len(images)) + ' Pages'

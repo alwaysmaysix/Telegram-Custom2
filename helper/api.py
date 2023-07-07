@@ -78,3 +78,15 @@ def get_comic(url):
     image_tags = content.find_all('img', class_='wp-manga-chapter-img')
     links = [img['data-src'].strip() for img in image_tags]
     return links
+    
+def get_comic_info(url):
+    soup = get_soup(url)
+    chapters = soup.find_all('li', class_='wp-manga-chapter')
+    chapter_list = []
+    for chapter in chapters:
+        a_tag = chapter.find('a')
+        if a_tag:
+            link = a_tag['href']
+            title = a_tag.text.strip()
+            chapter_list.append({"title": title, "url": link})
+    return chapter_list
