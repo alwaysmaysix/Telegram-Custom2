@@ -87,12 +87,13 @@ def handle_singles(message):
 @bot.message_handler(func=lambda message: message.text.startswith('/search'))
 def handle_search(message):
     query = message.text.replace('/search', '').strip().replace(' ', '+')
-    heading, results = search(query)
-    bot.reply_to(message, heading)
-    
-    for item in results:
-        bot.send_photo(message.chat.id, item['image'], caption = f'{item['title']}\n{item['url']}\n\n{item['status']}\n\n{item['genres']}\n\n{item['chapter']}\n{item['chapter_url']}')
-    
+    results = search(query)
+    bot.reply_to(message, results[0])  # Assuming results[0] contains the heading
+
+    for item in results[1:]:
+        caption = f"{item['title']}\n{item['url']}\n\n{item['status']}\n\n{item['genres']}\n\n{item['chapter']}\n{item['chapter_url']}"
+        bot.send_photo(message.chat.id, item['image'], caption=caption)
+
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):
