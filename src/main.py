@@ -89,7 +89,7 @@ def handle_search(message):
     results = search(query)
     bot.reply_to(message, results[0])  # Assuming results[0] contains the heading
 
-    for item in results[1:]:
+    for item in results[1]:
         caption = f"{item['title']}\n{item['url']}\n\n{item['status']}\n\n{item['genres']}\n\n{item['chapter']}\n{item['chapter_url']}"
         bot.send_photo(message.chat.id, item['image'], caption=caption)
 
