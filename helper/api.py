@@ -84,7 +84,7 @@ def get_comic_info(url):
     Title = soup.find('div', class_='post-title').find('h1').text.strip()
     image = soup.find('div', class_='summary_image').find('img')['data-src'].strip()
     summary = soup.find('div', class_='summary__content').find('p').text.strip()
-    info = '⭐Rating : ' + soup.find('div', class_='summary-content vote-details').text.replace(Title, '').strip() + '\n\nGenres : ' + soup.find('div', class_='genres-content').text.strip()
+    info = '⭐Rating \n' + soup.find('div', class_='summary-content vote-details').text.replace(Title, '').strip() + '\n\n🛑Genres\n' + soup.find('div', class_='genres-content').text.strip()
     chapters = soup.find_all('li', class_='wp-manga-chapter')
     chapter_list = []
     for chapter in chapters:
