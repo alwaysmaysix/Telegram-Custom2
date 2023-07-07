@@ -81,6 +81,7 @@ def get_comic(url):
     
 def get_comic_info(url):
     soup = get_soup(url)
+    summary = soup.find('div', class_='summary__content').find('p').text
     chapters = soup.find_all('li', class_='wp-manga-chapter')
     chapter_list = []
     for chapter in chapters:
@@ -89,4 +90,4 @@ def get_comic_info(url):
             link = a_tag['href']
             title = a_tag.text.strip()
             chapter_list.append({"title": title, "url": link})
-    return chapter_list
+    return summary, chapter_list
