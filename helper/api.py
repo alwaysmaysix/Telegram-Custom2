@@ -83,10 +83,11 @@ def search(query):
     titles = soup.find_all('div', class_='post-title')
     summaries = soup.find_all('div', class_='post-content')
     latest_chapters = soup.find_all('div', class_='meta-item latest-chap')
+    ratings = soup.find_all('span', class_='score font-meta total_votes')
 
     results = []
 
-    for image, title, summary, chapter in zip(images, titles, summaries, latest_chapters):
+    for image, title, summary, chapter, rating in zip(images, titles, summaries, latest_chapters, ratings):
         item_dict = {}
 
         a_tag = title.find('a')
@@ -103,6 +104,8 @@ def search(query):
         chapter_link = chapter.find('a')['href']
         item_dict['chapter'] = chapter.find('a').text.strip()
         item_dict['chapter_url'] = chapter_link
+        
+        item_dict['rating'] = rating.text.strip()
 
         results.append(item_dict)
 

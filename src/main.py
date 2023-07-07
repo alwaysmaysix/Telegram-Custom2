@@ -86,11 +86,13 @@ def handle_singles(message):
 @bot.message_handler(func=lambda message: message.text.startswith('/search'))
 def handle_search(message):
     query = message.text.replace('/search', '').strip().replace(' ', '+')
+    if query = '':
+        return
     results = search(query)
     bot.reply_to(message, results[0])  # Assuming results[0] contains the heading
 
     for item in results[1]:
-        caption = f"{item['title']}\n{item['url']}\n\n{item['status']}\n\n{item['genres']}\n\n{item['chapter']}\n{item['chapter_url']}"
+        caption = f"⭕{item['title']}⭕\n{item['rating']}⭐\n{item['url']}\n\nStatus : {item['status']}\n\n🛑Genres\n{item['genres']}\n\nLatest Chapter\n{item['chapter']}\n{item['chapter_url']}"
         bot.send_photo(message.chat.id, item['image'], caption=caption)
 
 # Handler for any other message
