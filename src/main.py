@@ -86,7 +86,7 @@ def handle_singles(message):
 @bot.message_handler(func=lambda message: message.text.startswith('/search'))
 def handle_search(message):
     query = message.text.replace('/search', '').strip().replace(' ', '+')
-    if query = '':
+    if query == '':
         return
     results = search(query)
     bot.reply_to(message, results[0])  # Assuming results[0] contains the heading
