@@ -9,12 +9,13 @@ headers = {
 def get_soup(url):
     response = requests.get(url, headers=headers)
     html_content = response.text
+    status = response.status_code
     soup = BeautifulSoup(html_content, 'html.parser')
-    return soup
+    return status, soup
 
 def apc():
     url = os.getenv('url') + 'home-3/'
-    soup = get_soup(url)
+    status, soup = get_soup(url)
     content = soup.find('div', class_='page-content-listing item-big_thumbnail')
 
     titles = content.find_all('h3', class_="h5")
@@ -51,14 +52,14 @@ def apc():
 
 
 def get_comic(url):
-    soup = get_soup(url)
+    status, soup = get_soup(url)
     content = soup.find('div', class_='reading-content')
     image_tags = content.find_all('img', class_='wp-manga-chapter-img')
     links = [img['data-src'].strip() for img in image_tags]
     return links
     
 def get_comic_info(url):
-    soup = get_soup(url)
+    status, soup = get_soup(url)
     Title = soup.find('div', class_='post-title').find('h1').text.strip()
     image = soup.find('div', class_='summary_image').find('img')['data-src'].strip()
     summary = soup.find('div', class_='summary__content').find('p').text.strip()
@@ -76,8 +77,9 @@ def get_comic_info(url):
     
 def search(query, n):
     url = os.getenv('url') + 'page/' + str(n) + '/?s=' + query + '&post_type=wp-manga&m_orderby=views'
-    print(url)
-    soup = get_soup(url)
+    status, soup = get_soup(url)
+    if status != 200:
+        return
     results_heading = soup.find('h1', class_='h4').text.strip()
 
     images = soup.find_all('div', class_='tab-thumb c-image-hover')
