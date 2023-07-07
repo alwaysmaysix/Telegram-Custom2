@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc, get_comic, get_comic_info
+from helper.api import apc, get_comic, get_comic_info, search
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -82,6 +82,16 @@ def handle_singles(message):
                 bot.send_message(message.chat.id, f'{n} Pages Completed')
         bot.send_message(message.chat.id, 'Comic Completed')
 
+
+@bot.message_handler(func=lambda message: message.text.startswith('/search'))
+def handle_search(message):
+    query = message.text.replace('/search', '').strip().replace(' ', '+')
+    heading, results = search(query)
+    bot.reply_to(message, heading)
+    
+    for item in results:
+        bot.send_photo(message.chat.id, item['image'], caption = f'{item['title']}\n{item['url']}\n\n{item['status']}\n\n{item['genres']}\n\n{item['chapter']}\n{item['chapter_url']}')
+    
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
 def handle_message(message):

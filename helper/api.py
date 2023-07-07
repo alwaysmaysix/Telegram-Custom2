@@ -77,28 +77,33 @@ def get_comic_info(url):
 def search(query):
     url = os.getenv('url') + 'page/1/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     soup = get_soup(url)
-    results = soup.find('h1', class_='h4').text.strip()
-    
+    results_heading = soup.find('h1', class_='h4').text.strip()
+
     images = soup.find_all('div', class_='tab-thumb c-image-hover')
     titles = soup.find_all('div', class_='post-title')
-    summarys = soup.find_all('div', class_='post-content')
-    latest_chapters = soup.find_all('div', class_='meta-item latest-chap').find('a')['href']
+    summaries = soup.find_all('div', class_='post-content')
+    latest_chapters = soup.find_all('div', class_='meta-item latest-chap')
+
     results = []
-    
-    for image, title, summary, chapter in zip(images, titles, summarys, latest_chapters):
+
+    for image, title, summary, chapter in zip(images, titles, summaries, latest_chapters):
         item_dict = {}
 
         a_tag = title.find('a')
         item_dict['title'] = a_tag.text.strip()
         item_dict['url'] = a_tag['href']
 
-        url = image.find('img')['data-src']
-        item_dict['image'] = url
+        img_url = image.find('img')['data-src']
+        item_dict['image'] = img_url
 
         data = summary.find_all('div', class_='summary-content')
         item_dict['status'] = data[2].text.strip()
         item_dict['genres'] = data[1].text.strip()
 
-        chap = chapter.find('a')
-        item_dict['chapter'] = chap.text.strip()
-        item_dict['chapter_url'] = chap['href']
+        chapter_link = chapter.find('a')['href']
+        item_dict['chapter'] = chapter.find('a').text.strip()
+        item_dict['chapter_url'] = chapter_link
+
+        results.append(item_dict)
+
+    return results_heading, results
