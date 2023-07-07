@@ -13,7 +13,7 @@ def get_soup(url):
     return soup
 
 def apc():
-    url = os.getenv('url')
+    url = os.getenv('url') + 'home-3/'
     soup = get_soup(url)
     content = soup.find('div', class_='page-content-listing item-big_thumbnail')
 
@@ -72,3 +72,7 @@ def get_comic_info(url):
             title = a_tag.text.strip()
             chapter_list.append({"title": title, "url": link})
     return Title, image, summary, info, chapter_list
+    
+    
+def search(query):
+    url = 
