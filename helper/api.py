@@ -75,5 +75,30 @@ def get_comic_info(url):
     
     
 def search(query):
-    url = os.getenv('url') + 'page/1/?s=' + query + '&post_type=wp-manga'
+    url = os.getenv('url') + 'page/1/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     soup = get_soup(url)
+    results = soup.find('h1', class_='h4').text.strip()
+    
+    images = soup.find_all('div', class_='tab-thumb c-image-hover')
+    titles = soup.find_all('div', class_='post-title')
+    summarys = soup.find_all('div', class_='post-content')
+    latest_chapters = soup.find_all('div', class_='meta-item latest-chap').find('a')['href']
+    results = []
+    
+    for image, title, summary, chapter in zip(images, titles, summarys, latest_chapters):
+        item_dict = {}
+
+        a_tag = title.find('a')
+        item_dict['title'] = a_tag.text.strip()
+        item_dict['url'] = a_tag['href']
+
+        url = image.find('img')['data-src']
+        item_dict['image'] = url
+
+        data = summary.find_all('div', class_='summary-content')
+        item_dict['status'] = data[2].text.strip()
+        item_dict['genres'] = data[1].text.strip()
+
+        chap = chapter.find('a')
+        item_dict['chapter'] = chap.text.strip()
+        item_dict['chapter_url'] = chap['href']
