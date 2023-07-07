@@ -13,7 +13,7 @@ def get_soup(url):
     return soup
 
 def apc():
-    url = os.getenv('url2')
+    url = os.getenv('url')
     soup = get_soup(url)
     content = soup.find('div', class_='page-content-listing item-big_thumbnail')
 
