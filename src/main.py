@@ -53,8 +53,7 @@ def handle_singles(message):
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
     if len(parts) == 2:
         title, image, summary, info, chapters = get_comic_info(url)
-        bot.send_photo(message.chat.id, image, caption = f'{title}\n\n\nSummary - \n\n{summary}')
-        bot.send_message(message.chat.id, info)
+        bot.send_photo(message.chat.id, image, caption = f'{title}\n\n\nSummary - \n{summary} \n\n{info}')
         response = 'LATEST MANGA RELEASES -> \n\n\n'
         n = 0
         for chapter in chapters:
