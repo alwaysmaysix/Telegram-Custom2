@@ -74,8 +74,8 @@ def get_comic_info(url):
     return Title, image, summary, info, chapter_list
     
     
-def search(query):
-    url = os.getenv('url') + 'page/1/?s=' + query + '&post_type=wp-manga&m_orderby=views'
+def search(query, n):
+    url = os.getenv('url') + 'page/{n}/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     soup = get_soup(url)
     results_heading = soup.find('h1', class_='h4').text.strip()
 
