@@ -79,7 +79,7 @@ def search(query, n):
     url = os.getenv('url') + 'page/' + str(n) + '/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     status, soup = get_soup(url)
     if status != 200:
-        return
+        return None, None
     results_heading = soup.find('h1', class_='h4').text.strip()
 
     images = soup.find_all('div', class_='tab-thumb c-image-hover')
