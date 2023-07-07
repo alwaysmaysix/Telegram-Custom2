@@ -7,7 +7,6 @@ from helper.api import apc, get_comic, get_comic_info, search
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
-bot.set_webhook(url=os.getenv('webhook_url'))
 previous_message_ids = []
 
 # Bot route to handle incoming messages
