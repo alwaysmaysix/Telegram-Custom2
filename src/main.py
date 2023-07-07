@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import fn_org, apc, get_comic, get_comic_info
+from helper.api import apc, get_comic, get_comic_info
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -34,7 +34,7 @@ def help_command(message):
     response_text += "/help - Show this help message.\nnew_com"
     bot.reply_to(message, response_text)
 
-@bot.message_handler(commands=['com'])
+@bot.message_handler(commands=['new'])
 def handle_com(message):
     full_list = apc()
     for item in full_list:
@@ -80,23 +80,6 @@ def handle_singles(message):
             if n%20 == 0:
                 bot.send_message(message.chat.id, f'{n} Pages Completed')
         bot.send_message(message.chat.id, 'Comic Completed')
-
-@bot.message_handler(func=lambda message: message.text.startswith('/new'))
-def handle_fn(message):
-    query = message.text.split('_')
-    if len(query) == 1:
-        page = '1'
-    else:
-        page = query[1]
-    full_list = fn_org(page)
-    for item in full_list:
-        title = item['title']
-        image = item['img']
-        bot.send_photo(message.chat.id, image, caption = title)
-    try:
-        bot.reply_to(message, f'/new_{(int(page) + 1)}')
-    except:
-        bot.reply_to(message, 'Usage : /new_<number>')
 
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
