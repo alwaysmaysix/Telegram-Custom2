@@ -32,7 +32,7 @@ def help_command(message):
     response_text += "/start - Start the bot.\n"
     response_text += "/help - Show this help message.\n"
     response_text += "/new - View latest Comics.\n"
-    response_text += "/search query - search for Comics.\n"
+    response_text += "/s query - search for Comics.\n"
     bot.reply_to(message, response_text)
 
 @bot.message_handler(commands=['new'])
