@@ -75,4 +75,5 @@ def get_comic_info(url):
     
     
 def search(query):
-    url = 
+    url = os.getenv('url') + 'page/1/?s=' + query + '&post_type=wp-manga'
+    soup = get_soup(url)
