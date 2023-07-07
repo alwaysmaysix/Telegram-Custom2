@@ -102,7 +102,7 @@ def handle_search(message):
     for item in results:
         caption = f"⭕{item['title']}⭕\n{item['rating']}⭐\n{item['url']}\n\nStatus : {item['status']}\n\n🛑Genres\n{item['genres']}\n\nLatest Chapter\n{item['chapter']}\n{item['chapter_url']}"
         bot.send_photo(message.chat.id, item['image'], caption=caption)
-    bot.reply_to((message, f'/s{n+1}_{query}'))
+    bot.reply_to(message, f'/s{n+1}_{query}')
     
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
