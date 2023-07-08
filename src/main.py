@@ -69,10 +69,11 @@ def handle_singles(message):
     if len(parts) == 3:
         images = get_comic_images(url)
         pages = str(len(images)) + ' Pages'
-        pdf, passed = images_to_pdf(images, parts[-2])
         bot.reply_to(message, pages)
+        pdf, passed = images_to_pdf(images, parts[-2])
+        caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
         with open(pdf, 'rb') as pdf_file:
-            bot.send_document(message.chat.id, pdf_file, caption = f'{passed} Pages were passed')
+            bot.send_document(message.chat.id, pdf_file, caption = caption)
 '''     n = 0
         for img in images:
             n+=1
