@@ -18,37 +18,33 @@ def apc():
     soup = get_soup(url)
     content = soup.find('div', class_='page-content-listing item-big_thumbnail')
 
-    titles = content.find_all('h3', class_="h5")
+    titles = content.find_all('h3', class_='h5')
     photos = content.find_all('img')
-    ratings = content.find_all('span', class_="score font-meta total_votes")
-    chapters = content.find_all('div', class_="list-chapter")
+    ratings = content.find_all('span', class_='score font-meta total_votes')
+    chapters = content.find_all('div', class_='list-chapter')
+
     results = []
 
     for title, photo, rating, chapter in zip(titles, photos, ratings, chapters):
-        title_dict = {}
+        result = {}
+
         a_tag = title.find('a')
         if a_tag:
-            title_text = a_tag.text.strip()
-            link = a_tag['href']
-            title_dict['title'] = title_text
-            title_dict['link'] = link
+            result['title'] = a_tag.text.strip()
+            result['link'] = a_tag['href']
 
-        img = photo['data-src']
-        title_dict['img'] = img
+        result['img'] = photo['data-src']
+        result['rating'] = rating.text.strip()
 
-        rating_text = rating.text.strip()
-        title_dict['rating'] = rating_text
-        
         first_chapter = chapter.find('div', class_='chapter-item')
         if first_chapter:
-            chapter_title = first_chapter.find('span', class_='chapter font-meta').text.strip()
-            chapter_url = first_chapter.find('a', class_='btn-link')['href']
-            title_dict['chapter'] = chapter_title
-            title_dict['chapter_url'] = chapter_url
-        
-        results.append(title_dict)
+            result['chapter'] = first_chapter.find('span', class_='chapter font-meta').text.strip()
+            result['chapter_url'] = first_chapter.find('a', class_='btn-link')['href']
+
+        results.append(result)
 
     return results
+
 
 
 def get_comic(url):
