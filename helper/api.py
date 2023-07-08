@@ -43,28 +43,32 @@ def apc():
         results.append(result)
     return results
 
-def get_comic(url):
+
+def get_comic_images(url):
     soup = get_soup(url)
     content = soup.find('div', class_='reading-content')
     image_tags = content.find_all('img', class_='wp-manga-chapter-img')
-    links = [img['data-src'].strip() for img in image_tags]
-    return links
-    
+    image_links = [img['data-src'].strip() for img in image_tags]
+    return image_links
+
 def get_comic_info(url):
     soup = get_soup(url)
-    Title = soup.find('div', class_='post-title').find('h1').text.strip()
-    image = soup.find('div', class_='summary_image').find('img')['data-src'].strip()
+    title = soup.find('div', class_='post-title').find('h1').text.strip()
+    image_url = soup.find('div', class_='summary_image').find('img')['data-src'].strip()
     summary = soup.find('div', class_='summary__content').find('p').text.strip()
-    info = '⭐Rating \n' + soup.find('div', class_='summary-content vote-details').text.replace(Title, '').strip() + '\n\n🛑Genres\n' + soup.find('div', class_='genres-content').text.strip()
-    chapters = soup.find_all('li', class_='wp-manga-chapter')
+    rating = '⭐Rating \n' + soup.find('div', class_='summary-content vote-details').text.replace(title, '').strip()
+    genres = '🛑Genres\n' + soup.find('div', class_='genres-content').text.strip()
+
     chapter_list = []
+    chapters = soup.find_all('li', class_='wp-manga-chapter')
     for chapter in chapters:
         a_tag = chapter.find('a')
         if a_tag:
             link = a_tag['href']
-            title = a_tag.text.strip()
-            chapter_list.append({"title": title, "url": link})
-    return Title, image, summary, info, chapter_list
+            chapter_title = a_tag.text.strip()
+            chapter_list.append({"title": chapter_title, "url": link})
+
+    return title, image_url, summary, rating, genres, chapter_list
     
     
 def search(query, n):
