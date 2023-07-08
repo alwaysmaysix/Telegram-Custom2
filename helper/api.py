@@ -116,7 +116,7 @@ def search(query, n):
 
     return results_heading, results
 
-def images_to_pdf(links_list):
+def images_to_pdf(links_list, title):
     image_paths = []
     os.makedirs('images', exist_ok=True)
     n = 0
@@ -129,7 +129,7 @@ def images_to_pdf(links_list):
             image_paths.append(image_path)
         else:
             n+=1
-    pdf = 'comic.pdf'
+    pdf = f'{title}.pdf'
     with open(pdf, "wb") as f:
         f.write(img2pdf.convert(image_paths))
     return pdf, n
