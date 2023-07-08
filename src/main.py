@@ -74,7 +74,7 @@ def handle_singles(message):
         bot.reply_to(message, pages)
         with open(pdf, 'rb') as pdf_file:
             bot.send_document(message.chat.id, pdf_file, caption = f'{passed} Pages were passed')
-        n = 0
+'''     n = 0
         for img in images:
             n+=1
             time.sleep(0.2)
@@ -85,6 +85,7 @@ def handle_singles(message):
             if n%20 == 0:
                 bot.send_message(message.chat.id, f'{n} Pages Completed')
         bot.send_message(message.chat.id, 'Comic Completed')
+'''
 
 
 @bot.message_handler(func=lambda message: message.text.startswith('/s'))
