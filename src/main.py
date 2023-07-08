@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc, get_comic, get_comic_info, search, images_to_pdf
+from helper.api import apc, get_comic_images, get_comic_info, search, images_to_pdf
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -53,8 +53,8 @@ def handle_singles(message):
     url = message.text
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
     if len(parts) == 2:
-        title, image, summary, info, chapters = get_comic_info(url)
-        bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n{info}')
+        title, image, summary, rating, genres, chapters = get_comic_info(url)
+        bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
         response = 'LATEST MANGA RELEASES -> \n\n\n'
         n = 0
         for chapter in chapters:
@@ -67,7 +67,7 @@ def handle_singles(message):
             bot.reply_to(message, response)
             
     if len(parts) == 3:
-        images = get_comic(url)
+        images = get_comic_images(url)
         pages = str(len(images)) + ' Pages'
         pdf_title = parts[-2]
         pdf, passed = images_to_pdf(images, pdf_title)
