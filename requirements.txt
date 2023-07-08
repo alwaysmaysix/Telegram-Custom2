@@ -4,3 +4,5 @@ gunicorn
 telegraph
 requests
 beautifulsoup4
+pillow==9.0.0
+img2pdf

@@ -1,5 +1,6 @@
 import requests
 from bs4 import BeautifulSoup
+import img2pdf
 import os
 
 headers = {
@@ -114,3 +115,21 @@ def search(query, n):
         results.append(item_dict)
 
     return results_heading, results
+
+def images_to_pdf(links_list):
+    image_paths = []
+    os.makedirs('images', exist_ok=True)
+    n = 0
+    for i, image_link in enumerate(links_list):
+        response = requests.get(image_link, headers=headers)
+        if response.status_code == 200:
+            image_path = 'images/' + f'image_{i+1}.jpg'
+            with open(image_path, 'wb') as image_file:
+                image_file.write(response.content)
+            image_paths.append(image_path)
+        else:
+            n+=1
+    pdf = 'comic.pdf'
+    with open(pdf, "wb") as f:
+        f.write(img2pdf.convert(image_paths))
+    return pdf, n

@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc, get_comic, get_comic_info, search
+from helper.api import apc, get_comic, get_comic_info, search, images_to_pdf
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -69,7 +69,11 @@ def handle_singles(message):
     if len(parts) == 3:
         images = get_comic(url)
         pages = str(len(images)) + ' Pages'
+        pdf, passed = images_to_pdf(images)
         bot.reply_to(message, pages)
+        bot.reply_to(message, f'{passed} Pages were passed')
+        with open(pdf, 'rb') as pdf_file:
+            bot.send_document(message.chat.id, document=InputFile(pdf_file, filename='comic.pdf'))
         n = 0
         for img in images:
             n+=1
