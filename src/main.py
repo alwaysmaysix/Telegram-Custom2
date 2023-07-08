@@ -73,7 +73,7 @@ def handle_singles(message):
         bot.reply_to(message, pages)
         bot.reply_to(message, f'{passed} Pages were passed')
         with open(pdf, 'rb') as pdf_file:
-            bot.send_document(message.chat.id, document=InputFile(pdf_file, filename='comic.pdf'))
+            bot.send_document(message.chat.id, pdf_file)
         n = 0
         for img in images:
             n+=1
