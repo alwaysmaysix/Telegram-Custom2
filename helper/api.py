@@ -27,7 +27,6 @@ def apc():
 
     for title, photo, rating, chapter in zip(titles, photos, ratings, chapters):
         result = {}
-
         a_tag = title.find('a')
         if a_tag:
             result['title'] = a_tag.text.strip()
@@ -42,10 +41,7 @@ def apc():
             result['chapter_url'] = first_chapter.find('a', class_='btn-link')['href']
 
         results.append(result)
-
     return results
-
-
 
 def get_comic(url):
     soup = get_soup(url)
