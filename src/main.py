@@ -44,8 +44,8 @@ def handle_com(message):
         image = item['img']
         print(image)
         print(caption)
-        return
-        bot.send_photo(message.chat.id, image, caption = caption)
+        bot.reply_to(message, caption)
+        bot.send_photo(message.chat.id, image)
     
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
