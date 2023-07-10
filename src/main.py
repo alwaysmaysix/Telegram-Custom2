@@ -44,6 +44,7 @@ def handle_com(message):
         image = item['img']
         print(image)
         print(caption)
+        return
         bot.send_photo(message.chat.id, image, caption = caption)
     
 
