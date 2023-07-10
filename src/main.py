@@ -37,15 +37,14 @@ def help_command(message):
 
 @bot.message_handler(commands=['new'])
 def handle_com(message):
+    if message.message_id in previous_message_ids:  
+         return  
+    previous_message_ids.append(message.message_id)
     full_list = apc()
     for item in full_list:
-        print(item)
-        caption = item['title'] + '\n' + item['rating'] + '⭐' + '\n' + item['link'] +  '\n\nLatest Chapter\n' + item['chapter'] + '\n' + item['chapter_url']
+        cap = item['title'] + '\n' + item['rating'] + '⭐' + '\n' + item['link'] +  '\n\nLatest Chapter\n' + item['chapter'] + '\n' + item['chapter_url']
         image = item['img']
-        print(image)
-        print(caption)
-        bot.reply_to(message, caption)
-        bot.send_photo(message.chat.id, image)
+        bot.send_photo(message.chat.id, image, caption = str(cap))
     
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
