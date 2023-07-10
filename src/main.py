@@ -42,6 +42,8 @@ def handle_com(message):
         print(item)
         caption = item['title'] + '\n' + item['rating'] + '⭐' + '\n' + item['link'] +  '\n\nLatest Chapter\n' + item['chapter'] + '\n' + item['chapter_url']
         image = item['img']
+        print(image)
+        print(caption)
         bot.send_photo(message.chat.id, image, caption = caption)
     
 
