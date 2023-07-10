@@ -75,11 +75,11 @@ def search(query, n):
     url = os.getenv('url') + 'page/' + str(n) + '/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     soup = get_soup(url)
 
-    results_heading = soup.find('h1', class_='h4')
-    if not results_heading :
+    try:
+        results_heading = soup.find('h1', class_='h4').text.strip()
+    except:
         return None, None
         
-    results_heading = results_heading.text.strip()
     images = soup.find_all('div', class_='tab-thumb c-image-hover')
     titles = soup.find_all('div', class_='post-title')
     summaries = soup.find_all('div', class_='post-content')
