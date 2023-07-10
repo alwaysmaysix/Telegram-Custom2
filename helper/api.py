@@ -18,7 +18,10 @@ def apc():
     soup = get_soup(url)
     content = soup.find('div', class_='page-content-listing item-big_thumbnail')
 
-    titles = content.find_all('h3', class_='h5')
+    try :
+        titles = content.find_all('h3', class_='h5')
+    except:
+        return []
     photos = content.find_all('img')
     ratings = content.find_all('span', class_='score font-meta total_votes')
     chapters = content.find_all('div', class_='list-chapter')
