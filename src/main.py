@@ -44,7 +44,7 @@ def handle_com(message):
     for item in full_list:
         cap = f"{item['title']} \n{item['rating']}⭐\n\n<code>{item['link']}</code>\n\nLatest Chapter\n{item['chapter']}\n{item['chapter_url']}"
         image = item['img']
-        bot.send_photo(message.chat.id, image, caption = str(cap), reply_markup=telebot.types.InlineKeyboardMarkup())
+        bot.send_photo(message.chat.id, image, caption = str(cap), parse_mode='HTML', reply_markup=telebot.types.InlineKeyboardMarkup())
     
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
