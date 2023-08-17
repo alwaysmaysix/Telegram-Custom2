@@ -42,9 +42,9 @@ def handle_com(message):
     previous_message_ids.append(message.message_id)
     full_list = apc()
     for item in full_list:
-        cap = item['title'] + '\n' + item['rating'] + '⭐' + '\n' + item['link'] +  '\n\nLatest Chapter\n' + item['chapter'] + '\n' + item['chapter_url']
+        cap = f"{item['title']} \n{item['rating']}⭐\n\n<code>{item['link']}</code>\n\nLatest Chapter\n{item['chapter']}\n{item['chapter_url']}"
         image = item['img']
-        bot.send_photo(message.chat.id, image, caption = str(cap))
+        bot.send_photo(message.chat.id, image, caption = str(cap), reply_markup=markup)
     
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
