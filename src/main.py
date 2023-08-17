@@ -42,9 +42,9 @@ def handle_com(message):
     previous_message_ids.append(message.message_id)
     full_list = apc()
     for item in full_list:
-        cap = f"{item['title']} \n{item['rating']}⭐\n\n<code>{item['link']}</code>\n\nLatest Chapter\n{item['chapter']}\n{item['chapter_url']}"
+        cap = f"{item['title']} \n{item['rating']}⭐\n\n<code>{item['link']}</code>\n\nLatest Chapter\n{item['chapter']}\n<code>{item['chapter_url']}</code>"
         image = item['img']
-        bot.send_photo(message.chat.id, image, caption = str(cap), parse_mode='HTML', reply_markup=telebot.types.InlineKeyboardMarkup())
+        bot.send_photo(message.chat.id, image, caption = str(cap), parse_mode='HTML')
     
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
@@ -62,12 +62,12 @@ def handle_singles(message):
         n = 0
         for chapter in chapters:
             n+=1
-            response += chapter['title'] + '\n' + chapter['url'] + '\n\n'
+            response += f"{chapter['title']} \n<code>{chapter['url']}</code> \n\n"
             if n % 10 == 0:
-                bot.send_message(message.chat.id, response)
+                bot.send_message(message.chat.id, response, parse_mode='HTML')
                 response = ''
         if response != '':
-            bot.reply_to(message, response)
+            bot.reply_to(message, response, parse_mode='HTML')
             
     if len(parts) == 3:
         images = get_comic_images(url)
@@ -111,8 +111,8 @@ def handle_search(message):
     bot.reply_to(message, heading)  # Assuming results[0] contains the heading
 
     for item in results:
-        caption = f"⭕{item['title']}⭕\n{item['rating']}⭐\n{item['url']}\n\nStatus: {item['status']}\n\n🛑Genres\n{item['genres']}\n\nLatest Chapter\n{item['chapter']}\n{item['chapter_url']}"
-        bot.send_photo(message.chat.id, item['image'], caption=caption)
+        caption = f"⭕{item['title']}⭕\n{item['rating']}⭐\n<code>{item['url']}</code>\n\nStatus: {item['status']}\n\n🛑Genres\n{item['genres']}\n\nLatest Chapter\n{item['chapter']}\n<code>{item['chapter_url']}</code>"
+        bot.send_photo(message.chat.id, item['image'], caption=caption, parse_mode='HTML')
 
     next_page_command = f"/s{n+1}_{query.replace('+', '_')}"
     bot.reply_to(message, next_page_command)
