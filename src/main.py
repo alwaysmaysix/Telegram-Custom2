@@ -129,6 +129,8 @@ def handle_multiple(message):
 
     title, image, summary, rating, genres, chapters = get_comic_info(query)
     bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
+    
+    chapters.reverse()
 
     for chapter in chapters:
         url = chapter['url']
