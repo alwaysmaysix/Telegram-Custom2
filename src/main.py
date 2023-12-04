@@ -144,7 +144,7 @@ def handle_multiple(message):
             caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
             with open(pdf, 'rb') as pdf_file:
                 bot.send_document(message.chat.id, pdf_file, caption = caption)
-    Except error as e:
+    except error as e:
         bot.reply_to(message, e)
     
 # Handler for any other message
