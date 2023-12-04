@@ -120,7 +120,7 @@ def handle_search(message):
 
 @bot.message_handler(func=lambda message: message.text.startswith('/all '))
 def handle_downloads(message):
-
+    return
     
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
