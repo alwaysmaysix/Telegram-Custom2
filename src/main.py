@@ -33,6 +33,7 @@ def help_command(message):
     response_text += "/help - Show this help message.\n"
     response_text += "/new - View latest Comics.\n"
     response_text += "/s query - search for Comics.\n"
+    response_text += "/all comic - Fetch all volumes of the comic.\n"
     bot.reply_to(message, response_text)
 
 @bot.message_handler(commands=['new'])
@@ -116,6 +117,9 @@ def handle_search(message):
 
     next_page_command = f"/s{n+1}_{query.replace('+', '_')}"
     bot.reply_to(message, next_page_command)
+
+@bot.message_handler(func=lambda message: message.text.startswith('/all '))
+def handle_downloads(message):
 
     
 # Handler for any other message
