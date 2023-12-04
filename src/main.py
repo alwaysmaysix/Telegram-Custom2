@@ -132,16 +132,20 @@ def handle_multiple(message):
     
     chapters.reverse()
 
-    for chapter in chapters:
-        url = chapter['url']
-        title = chapter['title']
-        images = get_comic_images(url)
-        pages = title + '\n📃 ' + str(len(images)) + ' Pages'
-        bot.send_message(message.chat.id, pages)
-        pdf, passed = images_to_pdf(images, chapter['title'])
-        caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
-        with open(pdf, 'rb') as pdf_file:
-            bot.send_document(message.chat.id, pdf_file, caption = caption)
+    try:
+
+        for chapter in chapters:
+            url = chapter['url']
+            title = chapter['title']
+            images = get_comic_images(url)
+            pages = title + '\n📃 ' + str(len(images)) + ' Pages'
+            bot.send_message(message.chat.id, pages)
+            pdf, passed = images_to_pdf(images, chapter['title'])
+            caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+            with open(pdf, 'rb') as pdf_file:
+                bot.send_document(message.chat.id, pdf_file, caption = caption)
+    Except error as e:
+        bot.reply_to(message, e)
     
 # Handler for any other message
 @bot.message_handler(func=lambda message: True)
