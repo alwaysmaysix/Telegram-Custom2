@@ -119,7 +119,7 @@ def handle_search(message):
     bot.reply_to(message, next_page_command)
 
 @bot.message_handler(func=lambda message: message.text.startswith('/all '))
-def handle_downloads(message):
+def handle_multiple(message):
     return
     
 # Handler for any other message
