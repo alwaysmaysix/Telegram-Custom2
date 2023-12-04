@@ -120,6 +120,25 @@ def handle_search(message):
 
 @bot.message_handler(func=lambda message: message.text.startswith('/all '))
 def handle_multiple(message):
+    if message.message_id in previous_message_ids:  
+         return  
+    previous_message_ids.append(message.message_id)
+
+    text = message.text
+    query = text.replace('/all', '').strip()
+
+    title, image, summary, rating, genres, chapters = get_comic_info(url)
+    bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
+
+    for chapter in chapters:
+    url = chapter['url']
+    images = get_comic_images(url)
+    pages = str(len(images)) + ' Pages'
+    bot.reply_to(message, pages)
+    pdf, passed = images_to_pdf(images, parts[-2])
+    caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+    with open(pdf, 'rb') as pdf_file:
+        bot.send_document(message.chat.id, pdf_file, caption = caption)
     return
     
 # Handler for any other message
