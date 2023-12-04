@@ -133,7 +133,7 @@ def handle_multiple(message):
     chapters.reverse()
 
     try:
-
+        bot.send_message(message.chat.id, str(len(chapters)) + ' Chapters')
         for chapter in chapters:
             url = chapter['url']
             title = chapter['title']
