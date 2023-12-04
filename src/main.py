@@ -134,8 +134,8 @@ def handle_multiple(message):
         url = chapter['url']
         title = chapter['title']
         images = get_comic_images(url)
-        pages = title + '\n' + str(len(images)) + ' Pages'
-        bot.reply_to(message, pages)
+        pages = title + '\n📃 ' + str(len(images)) + ' Pages'
+        bot.send_message(message.chat.id, pages)
         pdf, passed = images_to_pdf(images, chapter['title'])
         caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
         with open(pdf, 'rb') as pdf_file:
