@@ -125,7 +125,7 @@ def handle_multiple(message):
     previous_message_ids.append(message.message_id)
 
     text = message.text
-    query = text.replace('/all', '').strip()
+    query = text.replace('/all', '',1).strip()
 
     title, image, summary, rating, genres, chapters = get_comic_info(query)
     bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
