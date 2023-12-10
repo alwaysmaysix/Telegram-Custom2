@@ -138,7 +138,7 @@ def handle_multiple(message):
     bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
     
     chapters.reverse()
-    chapters = chapters[n:]
+    chapters = chapters[int(n):]
     
     try:
         bot.send_message(message.chat.id, str(len(chapters)) + ' Chapters')
