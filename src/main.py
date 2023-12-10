@@ -33,7 +33,7 @@ def help_command(message):
     response_text += "/help - Show this help message.\n"
     response_text += "/new - View latest Comics.\n"
     response_text += "/s query - search for Comics.\n"
-    response_text += "/all comic - Fetch all volumes of the comic.\n"
+    response_text += "/all {n} comic - Fetch all volumes of the comic, from starting chapter n.\n"
     bot.reply_to(message, response_text)
 
 @bot.message_handler(commands=['new'])
@@ -125,13 +125,21 @@ def handle_multiple(message):
     previous_message_ids.append(message.message_id)
 
     text = message.text
-    query = text.replace('/all', '',1).strip()
+    query = text.replace('/all', '',1).strip().split()
 
-    title, image, summary, rating, genres, chapters = get_comic_info(query)
+    if query[1]:
+        n = query[0]
+        webcomic = query[1]
+    else:
+        n = 0
+        webcomic = query[0]
+
+    title, image, summary, rating, genres, chapters = get_comic_info(webcomic)
     bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
     
     chapters.reverse()
-
+    chapters = chapters[n:]
+    
     try:
         bot.send_message(message.chat.id, str(len(chapters)) + ' Chapters')
         for chapter in chapters:
