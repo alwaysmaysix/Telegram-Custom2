@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc, get_comic_images, get_comic_info, search, images_to_pdf
+from helper.api import apc, get_comic_images, get_comic_info, search, images_to_pdf, nh_comic_images, nh_images_to_pdf
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -47,6 +47,17 @@ def handle_com(message):
         image = item['img']
         bot.send_photo(message.chat.id, image, caption = str(cap), parse_mode='HTML')
     
+
+@bot.message_handler(func=lambda message: message.text.startswith('https://nhentai.to/g/'))
+def handle_nh(message):
+    if message.message_id in previous_message_ids:  
+         return  
+    previous_message_ids.append(message.message_id)
+    
+    url = message.text
+    images = nh_comic_images(url)
+    pages = str(len(images)) + ' Pages'
+    bot.reply_to(message, pages)
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
 def handle_singles(message):

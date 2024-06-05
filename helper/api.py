@@ -46,7 +46,14 @@ def apc():
         results.append(result)
     return results
 
-
+def nh_comic_images(url):
+    soup = get_soup(url)
+    content = soup.find('div', id="thumbnail-container")
+    image_tags = content.find_all('img')
+    image_links = [img.get('src').strip() for img in image_tags]
+    image_links = [image_link for image_link in image_links if image_link is not None]
+    return image_links
+    
 def get_comic_images(url):
     soup = get_soup(url)
     content = soup.find('div', class_='reading-content')
@@ -123,6 +130,24 @@ def images_to_pdf(links_list, title):
         response = requests.get(image_link, headers=headers)
         if response.status_code == 200:
             image_path = 'images/' + f'image_{i+1}.jpg'
+            with open(image_path, 'wb') as image_file:
+                image_file.write(response.content)
+            image_paths.append(image_path)
+        else:
+            n+=1
+    pdf = f'{title}.pdf'
+    with open(pdf, "wb") as f:
+        f.write(img2pdf.convert(image_paths))
+    return pdf, n
+
+def nh_images_to_pdf(links_list, title):
+    image_paths = []
+    os.makedirs('images', exist_ok=True)
+    n = 0
+    for i, image_link in enumerate(links_list):
+        response = requests.get(image_link, headers=headers)
+        if response.status_code == 200:
+            image_path = 'images/' + f'image_{i+1}.png'
             with open(image_path, 'wb') as image_file:
                 image_file.write(response.content)
             image_paths.append(image_path)
