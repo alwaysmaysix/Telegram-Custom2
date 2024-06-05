@@ -50,7 +50,7 @@ def nh_comic_images(url):
     soup = get_soup(url)
     content = soup.find('div', id="thumbnail-container")
     image_tags = content.find_all('img')
-    image_links = [img.get('src').strip() for img in image_tags]
+    image_links = [img.get('src') for img in image_tags]
     image_links = [image_link for image_link in image_links if image_link is not None]
     return image_links
     
