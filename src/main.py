@@ -58,6 +58,12 @@ def handle_nh(message):
     images = nh_comic_images(url)
     pages = str(len(images)) + ' Pages'
     bot.reply_to(message, pages)
+    
+    pdf, passed = nh_images_to_pdf(images[1:], url.split('/')[-1]) 
+    
+    caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+    with open(pdf, 'rb') as pdf_file:
+        bot.send_document(message.chat.id, pdf_file, caption = caption)
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://allporncomic.com/porncomic/'))
 def handle_singles(message):
