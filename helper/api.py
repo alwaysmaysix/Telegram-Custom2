@@ -75,7 +75,7 @@ def get_comic_info(url):
     
     
 def search(query, n):
-    url = os.getenv('url') + 'page/' + str(n) + '/?s=' + query + '&post_type=wp-manga&m_orderby=views'
+    url = 'https://allporncomic.com/' + 'page/' + str(n) + '/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     soup = get_soup(url)
 
     try:
