@@ -14,7 +14,7 @@ def get_soup(url):
     return soup
 
 def apc():
-    url = os.getenv('url') + 'home-3/'
+    url = 'https://allporncomic.com/' + 'home-3/'
     soup = get_soup(url)
     content = soup.find('div', class_='page-content-listing item-big_thumbnail')
 
