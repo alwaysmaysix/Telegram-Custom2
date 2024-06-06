@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc, get_comic_images, get_comic_info, search, images_to_pdf, nh_comic_images, nh_images_to_pdf
+from helper.api import apc, get_comic_images, get_comic_info, search, images_to_pdf, nh_comic_images
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -55,17 +55,19 @@ def handle_nh_random(message):
     previous_message_ids.append(message.message_id)
     
     url = 'https://nhentai.to/random'
-    images = nh_comic_images(url)
-    pages = str(len(images)) + ' Pages'
-    bot.reply_to(message, pages)
     
-    pdf, passed = nh_images_to_pdf(images[1:], url.split('/')[-1]) 
-    
-    caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
-    with open(pdf, 'rb') as pdf_file:
-        bot.send_document(message.chat.id, pdf_file, caption = caption)
-
-
+    try:
+        images = nh_comic_images(url)
+        pages = str(len(images)) + ' Pages'
+        bot.reply_to(message, pages)
+        
+        pdf, passed = images_to_pdf(images, url.split('/')[-1]) 
+        
+        caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+        with open(pdf, 'rb') as pdf_file:
+            bot.send_document(message.chat.id, pdf_file, caption = caption)
+    except Exception as e:
+        bot.reply_to(message, e)
 
 
 

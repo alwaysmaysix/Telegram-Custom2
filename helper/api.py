@@ -125,12 +125,14 @@ def search(query, n):
 
 def images_to_pdf(links_list, title):
     image_paths = []
-    os.makedirs('images', exist_ok=True)
+    image_folder = 'images'
+    os.makedirs(image_folder, exist_ok=True)
     n = 0
     for i, image_link in enumerate(links_list):
         response = requests.get(image_link, headers=headers)
         if response.status_code == 200:
-            image_path = 'images/' + get_file_name(image_link)
+            file_name = get_file_name(image_link)
+            image_path = os.path.join(image_folder, file_name)
             with open(image_path, 'wb') as image_file:
                 image_file.write(response.content)
             image_paths.append(image_path)
@@ -144,34 +146,3 @@ def images_to_pdf(links_list, title):
 
 def get_file_name(url):
     return url.split('/')[-1]
-
-
-def nh_images_to_pdf(links_list, title):
-    image_folder = 'images'
-    os.makedirs(image_folder, exist_ok=True)
-    failed_downloads = 0
-
-    for image_link in links_list:
-        response = requests.get(image_link, headers=headers)
-        if response.status_code == 200:
-            # Determine the original file name of the image
-            file_name = get_file_name(image_link)
-            image_path = os.path.join(image_folder, file_name)
-            with open(image_path, 'wb') as image_file:
-                image_file.write(response.content)
-        else:
-            failed_downloads += 1
-
-    # Convert all images to JPEG and collect their paths
-    image_paths = []
-    for link in links_list:
-        original_image_path = os.path.join(image_folder, get_file_name(link))
-        if os.path.isfile(original_image_path):
-            image_paths.append(original_image_path)
-
-    # Create PDF from the converted images
-    pdf_path = f'{title}.pdf'
-    with open(pdf_path, 'wb') as pdf_file:
-        pdf_file.write(img2pdf.convert(image_paths))
-
-    return pdf_path, failed_downloads
