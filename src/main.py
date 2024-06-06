@@ -77,16 +77,19 @@ def handle_nh(message):
     previous_message_ids.append(message.message_id)
     
     url = message.text
-    images = hr_comic_images(url)
-    pages = str(len(images)) + ' Pages'
-    bot.reply_to(message, pages)
     
-    pdf, passed = nh_images_to_pdf(images, url.split('/')[-1]) 
-    
-    caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
-    with open(pdf, 'rb') as pdf_file:
-        bot.send_document(message.chat.id, pdf_file, caption = caption)
-
+    try:
+        images = hr_comic_images(url)
+        pages = str(len(images)) + ' Pages'
+        bot.reply_to(message, pages)
+        
+        pdf, passed = images_to_pdf(images, url.split('/')[-1]) 
+        
+        caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+        with open(pdf, 'rb') as pdf_file:
+            bot.send_document(message.chat.id, pdf_file, caption = caption)
+    except Exception as e:
+        bot.reply_to(message, e)
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://nhentai.to/g/'))
 def handle_nh(message):
@@ -99,7 +102,7 @@ def handle_nh(message):
     pages = str(len(images)) + ' Pages'
     bot.reply_to(message, pages)
     
-    pdf, passed = nh_images_to_pdf(images, url.split('/')[-1]) 
+    pdf, passed = images_to_pdf(images, url.split('/')[-1]) 
     
     caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
     with open(pdf, 'rb') as pdf_file:
