@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc, get_comic_images, get_comic_info, search, images_to_pdf, nh_comic_images
+from helper.api import apc_home, apc_comic_images, get_comic_info, search, images_to_pdf, nh_comic_images
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -41,7 +41,7 @@ def handle_com(message):
     if message.message_id in previous_message_ids:  
          return  
     previous_message_ids.append(message.message_id)
-    full_list = apc()
+    full_list = apc_home()
     for item in full_list:
         cap = f"{item['title']} \n{item['rating']}⭐\n\n🌐 <code>{item['link']}</code>\n\nLatest Chapter\n{item['chapter']}\n📌 <code>{item['chapter_url']}</code>"
         image = item['img']
@@ -96,28 +96,33 @@ def handle_singles(message):
     
     url = message.text
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
-    if len(parts) == 2:
-        title, image, summary, rating, genres, chapters = get_comic_info(url)
-        bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
-        response = 'LATEST MANGA RELEASES -> \n\n\n'
-        n = 0
-        for chapter in chapters:
-            n+=1
-            response += f"{chapter['title']} \n📌 <code>{chapter['url']}</code> \n\n"
-            if n % 10 == 0:
-                bot.send_message(message.chat.id, response, parse_mode='HTML')
-                response = ''
-        if response != '':
-            bot.reply_to(message, response, parse_mode='HTML')
-            
-    if len(parts) == 3:
-        images = get_comic_images(url)
-        pages = str(len(images)) + ' Pages'
-        bot.reply_to(message, pages)
-        pdf, passed = images_to_pdf(images, parts[-2])
-        caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
-        with open(pdf, 'rb') as pdf_file:
-            bot.send_document(message.chat.id, pdf_file, caption = caption)
+    
+    try:
+        if len(parts) == 2:
+            title, image, summary, rating, genres, chapters = get_comic_info(url)
+            bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
+            response = 'LATEST MANGA RELEASES -> \n\n\n'
+            n = 0
+            for chapter in chapters:
+                n+=1
+                response += f"{chapter['title']} \n📌 <code>{chapter['url']}</code> \n\n"
+                if n % 10 == 0:
+                    bot.send_message(message.chat.id, response, parse_mode='HTML')
+                    response = ''
+            if response != '':
+                bot.reply_to(message, response, parse_mode='HTML')
+                
+        if len(parts) == 3:
+            images = apc_comic_images(url)
+            pages = str(len(images)) + ' Pages'
+            bot.reply_to(message, pages)
+            pdf, passed = images_to_pdf(images, parts[-2])
+            caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+            with open(pdf, 'rb') as pdf_file:
+                bot.send_document(message.chat.id, pdf_file, caption = caption)
+    except Exception as e:
+        bot.reply_to(message, e)
+
 '''     n = 0
         for img in images:
             n+=1
@@ -185,7 +190,7 @@ def handle_multiple(message):
         for chapter in chapters:
             url = chapter['url']
             title = chapter['title']
-            images = get_comic_images(url)
+            images = apc_comic_images(url)
             pages = title + '\n📃 ' + str(len(images)) + ' Pages'
             bot.send_message(message.chat.id, pages)
             pdf, passed = images_to_pdf(images, chapter['title'])
@@ -194,8 +199,3 @@ def handle_multiple(message):
                 bot.send_document(message.chat.id, pdf_file, caption = caption)
     except Exception as e:
         bot.reply_to(message, e)
-    
-# Handler for any other message
-@bot.message_handler(func=lambda message: True)
-def handle_message(message):
-    bot.reply_to(message, message.text)
