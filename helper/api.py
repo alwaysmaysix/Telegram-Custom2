@@ -1,6 +1,7 @@
 import requests
 from bs4 import BeautifulSoup
 import img2pdf
+from PIL import Image
 import os
 
 headers = {
