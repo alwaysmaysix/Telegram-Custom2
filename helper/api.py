@@ -39,6 +39,15 @@ def get_file_name(url):
     return url.split('/')[-1]
 
 
+''' hr '''
+
+def hr_comic_images(url):
+    soup = get_soup(url)
+    content = soup.find('ul', class_="chapter-images-list lazy-listing__list")
+    image_tags = content.find_all('img')
+    image_links = [img.get('data-src') for img in image_tags]
+    return image_links
+
 
 ''' nh '''
 
