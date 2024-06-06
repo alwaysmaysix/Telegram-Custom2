@@ -62,7 +62,7 @@ def apc_comic_images(url):
     image_links = [img['data-src'].strip() for img in image_tags]
     return image_links
 
-def get_comic_info(url):
+def apc_comic_info(url):
     soup = get_soup(url)
     title = soup.find('div', class_='post-title').find('h1').text.strip()
     image_url = soup.find('div', class_='summary_image').find('img')['data-src'].strip()
@@ -82,7 +82,7 @@ def get_comic_info(url):
     return title, image_url, summary, rating, genres, chapter_list
     
     
-def search(query, n):
+def apc_search(query, n):
     url = 'https://allporncomic.com/' + 'page/' + str(n) + '/?s=' + query + '&post_type=wp-manga&m_orderby=views'
     soup = get_soup(url)
 

@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc_home, apc_comic_images, get_comic_info, search, images_to_pdf, nh_comic_images
+from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, images_to_pdf, nh_comic_images
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -99,7 +99,7 @@ def handle_singles(message):
     
     try:
         if len(parts) == 2:
-            title, image, summary, rating, genres, chapters = get_comic_info(url)
+            title, image, summary, rating, genres, chapters = apc_comic_info(url)
             bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
             response = 'LATEST MANGA RELEASES -> \n\n\n'
             n = 0
@@ -149,7 +149,7 @@ def handle_search(message):
     if not query:
         return
 
-    heading, results = search(query, n)
+    heading, results = apc_search(query, n)
     if not results:
         bot.reply_to(message, "No results found.")
         return
@@ -179,7 +179,7 @@ def handle_multiple(message):
         n = 0
         webcomic = query[0]
 
-    title, image, summary, rating, genres, chapters = get_comic_info(webcomic)
+    title, image, summary, rating, genres, chapters = apc_comic_info(webcomic)
     bot.send_photo(message.chat.id, image, caption = f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}')
     
     chapters.reverse()
