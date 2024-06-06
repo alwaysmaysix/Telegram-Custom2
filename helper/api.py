@@ -13,6 +13,49 @@ def get_soup(url):
     html_content = response.text
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
+    
+def images_to_pdf(links_list, title):
+    image_paths = []
+    image_folder = 'images'
+    os.makedirs(image_folder, exist_ok=True)
+    n = 0
+    for i, image_link in enumerate(links_list):
+        response = requests.get(image_link, headers=headers)
+        if response.status_code == 200:
+            file_name = get_file_name(image_link)
+            image_path = os.path.join(image_folder, file_name)
+            with open(image_path, 'wb') as image_file:
+                image_file.write(response.content)
+            image_paths.append(image_path)
+        else:
+            n+=1
+    pdf = f'{title}.pdf'
+    with open(pdf, "wb") as f:
+        f.write(img2pdf.convert(image_paths))
+    return pdf, n
+
+
+def get_file_name(url):
+    return url.split('/')[-1]
+
+
+
+''' nh '''
+
+def nh_comic_images(url):
+    soup = get_soup(url)
+    content = soup.find('div', id="thumbnail-container")
+    image_tags = content.find_all('img')
+    image_links = [img.get('src') for img in image_tags]
+    image_links = [image_link for image_link in image_links if image_link is not None]
+    return image_links
+
+
+
+''' apc functions '''
+
+
+
 
 def apc_home():
     url = 'https://allporncomic.com/' + 'home-3/'
@@ -46,14 +89,7 @@ def apc_home():
 
         results.append(result)
     return results
-
-def nh_comic_images(url):
-    soup = get_soup(url)
-    content = soup.find('div', id="thumbnail-container")
-    image_tags = content.find_all('img')
-    image_links = [img.get('src') for img in image_tags]
-    image_links = [image_link for image_link in image_links if image_link is not None]
-    return image_links
+    
     
 def apc_comic_images(url):
     soup = get_soup(url)
@@ -61,7 +97,7 @@ def apc_comic_images(url):
     image_tags = content.find_all('img', class_='wp-manga-chapter-img')
     image_links = [img['data-src'].strip() for img in image_tags]
     return image_links
-
+    
 def apc_comic_info(url):
     soup = get_soup(url)
     title = soup.find('div', class_='post-title').find('h1').text.strip()
@@ -122,27 +158,3 @@ def apc_search(query, n):
         results.append(item_dict)
 
     return results_heading, results
-
-def images_to_pdf(links_list, title):
-    image_paths = []
-    image_folder = 'images'
-    os.makedirs(image_folder, exist_ok=True)
-    n = 0
-    for i, image_link in enumerate(links_list):
-        response = requests.get(image_link, headers=headers)
-        if response.status_code == 200:
-            file_name = get_file_name(image_link)
-            image_path = os.path.join(image_folder, file_name)
-            with open(image_path, 'wb') as image_file:
-                image_file.write(response.content)
-            image_paths.append(image_path)
-        else:
-            n+=1
-    pdf = f'{title}.pdf'
-    with open(pdf, "wb") as f:
-        f.write(img2pdf.convert(image_paths))
-    return pdf, n
-
-
-def get_file_name(url):
-    return url.split('/')[-1]
