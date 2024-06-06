@@ -48,6 +48,27 @@ def handle_com(message):
         bot.send_photo(message.chat.id, image, caption = str(cap), parse_mode='HTML')
     
 
+@bot.message_handler(commands=['random'])
+def handle_nh_random(message):
+    if message.message_id in previous_message_ids:  
+         return  
+    previous_message_ids.append(message.message_id)
+    
+    url = 'https://nhentai.to/random'
+    images = nh_comic_images(url)
+    pages = str(len(images)) + ' Pages'
+    bot.reply_to(message, pages)
+    
+    pdf, passed = nh_images_to_pdf(images[1:], url.split('/')[-1]) 
+    
+    caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+    with open(pdf, 'rb') as pdf_file:
+        bot.send_document(message.chat.id, pdf_file, caption = caption)
+
+
+
+
+
 @bot.message_handler(func=lambda message: message.text.startswith('https://nhentai.to/g/'))
 def handle_nh(message):
     if message.message_id in previous_message_ids:  
