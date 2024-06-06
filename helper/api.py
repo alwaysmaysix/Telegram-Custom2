@@ -140,20 +140,47 @@ def images_to_pdf(links_list, title):
         f.write(img2pdf.convert(image_paths))
     return pdf, n
 
+
+def get_file_name(url):
+    """
+    Extracts the file name from the URL.
+    
+    :param url: URL of the image
+    :return: File name (e.g., 'image.jpg', 'picture.png')
+    """
+    return url.split('/')[-1]
+
+
 def nh_images_to_pdf(links_list, title):
-    image_paths = []
-    os.makedirs('images', exist_ok=True)
-    n = 0
-    for i, image_link in enumerate(links_list):
+    """
+    Downloads images from the provided URLs, keeps their original file names,
+    and compiles them into a PDF.
+
+    :param links_list: List of URLs pointing to the images
+    :param title: Title for the resulting PDF file
+    :return: Tuple containing the path to the created PDF and the number of failed downloads
+    """
+    image_folder = 'images'
+    os.makedirs(image_folder, exist_ok=True)
+    failed_downloads = 0
+
+    for image_link in links_list:
         response = requests.get(image_link, headers=headers)
         if response.status_code == 200:
-            image_path = 'images/' + f'image_{i+1}.png'
+            # Determine the original file name of the image
+            file_name = get_file_name(image_link)
+            image_path = os.path.join(image_folder, file_name)
             with open(image_path, 'wb') as image_file:
                 image_file.write(response.content)
-            image_paths.append(image_path)
         else:
-            n+=1
-    pdf = f'{title}.pdf'
-    with open(pdf, "wb") as f:
-        f.write(img2pdf.convert(image_paths))
-    return pdf, n
+            failed_downloads += 1
+
+    # Get all image paths
+    image_paths = [os.path.join(image_folder, get_file_name(link)) for link in links_list if os.path.isfile(os.path.join(image_folder, get_file_name(link)))]
+
+    # Create PDF from the downloaded images
+    pdf_path = f'{title}.pdf'
+    with open(pdf_path, 'wb') as pdf_file:
+        pdf_file.write(img2pdf.convert(image_paths))
+
+    return pdf_path, failed_downloads
