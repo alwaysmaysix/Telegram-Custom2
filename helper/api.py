@@ -14,7 +14,7 @@ def get_soup(url):
     soup = BeautifulSoup(html_content, 'html.parser')
     return soup
 
-def apc():
+def apc_home():
     url = 'https://allporncomic.com/' + 'home-3/'
     soup = get_soup(url)
     content = soup.find('div', class_='page-content-listing item-big_thumbnail')
@@ -55,7 +55,7 @@ def nh_comic_images(url):
     image_links = [image_link for image_link in image_links if image_link is not None]
     return image_links
     
-def get_comic_images(url):
+def apc_comic_images(url):
     soup = get_soup(url)
     content = soup.find('div', class_='reading-content')
     image_tags = content.find_all('img', class_='wp-manga-chapter-img')
