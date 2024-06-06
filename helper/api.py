@@ -151,9 +151,22 @@ def get_file_name(url):
     return url.split('/')[-1]
 
 
+def convert_image_to_jpeg(image_path):
+    """
+    Converts an image to JPEG format and saves it with a .jpg extension.
+    
+    :param image_path: Path to the original image
+    :return: Path to the converted JPEG image
+    """
+    img = Image.open(image_path)
+    jpeg_path = os.path.splitext(image_path)[0] + '.jpg'
+    rgb_img = img.convert('RGB')  # Convert image to RGB
+    rgb_img.save(jpeg_path, 'JPEG')
+    return jpeg_path
+
 def nh_images_to_pdf(links_list, title):
     """
-    Downloads images from the provided URLs, keeps their original file names,
+    Downloads images from the provided URLs, converts them to JPEG format,
     and compiles them into a PDF.
 
     :param links_list: List of URLs pointing to the images
@@ -175,10 +188,15 @@ def nh_images_to_pdf(links_list, title):
         else:
             failed_downloads += 1
 
-    # Get all image paths
-    image_paths = [os.path.join(image_folder, get_file_name(link)) for link in links_list if os.path.isfile(os.path.join(image_folder, get_file_name(link)))]
+    # Convert all images to JPEG and collect their paths
+    image_paths = []
+    for link in links_list:
+        original_image_path = os.path.join(image_folder, get_file_name(link))
+        if os.path.isfile(original_image_path):
+            jpeg_image_path = convert_image_to_jpeg(original_image_path)
+            image_paths.append(jpeg_image_path)
 
-    # Create PDF from the downloaded images
+    # Create PDF from the converted images
     pdf_path = f'{title}.pdf'
     with open(pdf_path, 'wb') as pdf_file:
         pdf_file.write(img2pdf.convert(image_paths))
