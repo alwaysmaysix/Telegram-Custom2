@@ -3,7 +3,7 @@ from flask import Flask, request
 import telebot
 import time
 from helper.log import log
-from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, images_to_pdf, nh_comic_images
+from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, images_to_pdf, nh_comic_images, hr_comic_images
 
 app = Flask(__name__)
 bot = telebot.TeleBot(os.getenv('bot_token'), threaded=False)
@@ -70,6 +70,23 @@ def handle_nh_random(message):
         bot.reply_to(message, e)
 
 
+@bot.message_handler(func=lambda message: message.text.startswith('https://hentairead.com/hentai/'))
+def handle_nh(message):
+    if message.message_id in previous_message_ids:  
+         return  
+    previous_message_ids.append(message.message_id)
+    
+    url = message.text
+    images = hr_comic_images(url)
+    pages = str(len(images)) + ' Pages'
+    bot.reply_to(message, pages)
+    
+    pdf, passed = nh_images_to_pdf(images, url.split('/')[-1]) 
+    
+    caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
+    with open(pdf, 'rb') as pdf_file:
+        bot.send_document(message.chat.id, pdf_file, caption = caption)
+
 
 @bot.message_handler(func=lambda message: message.text.startswith('https://nhentai.to/g/'))
 def handle_nh(message):
@@ -82,7 +99,7 @@ def handle_nh(message):
     pages = str(len(images)) + ' Pages'
     bot.reply_to(message, pages)
     
-    pdf, passed = nh_images_to_pdf(images[1:], url.split('/')[-1]) 
+    pdf, passed = nh_images_to_pdf(images, url.split('/')[-1]) 
     
     caption = f"{passed} Pages were passed" if passed != 0 else "Complete"
     with open(pdf, 'rb') as pdf_file:
