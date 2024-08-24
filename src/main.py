@@ -5,6 +5,7 @@ from pyrogram import Client, filters
 from helper.log import log
 from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, images_to_pdf, nh_comic_images, hr_comic_images
 
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
 nest_asyncio.apply()  # Apply nest_asyncio to allow nested event loops
 
 # Retrieve API ID, API Hash, and Bot Token from environment variables
