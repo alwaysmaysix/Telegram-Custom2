@@ -1,5 +1,4 @@
-pyTelegramBotAPI
-flask
+pyrofork==2.2.11
 gunicorn
 requests
 beautifulsoup4
