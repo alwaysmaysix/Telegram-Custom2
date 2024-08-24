@@ -2,8 +2,8 @@ import os
 import asyncio
 import nest_asyncio
 from pyrogram import Client, filters
-from helper.log import log
-from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, images_to_pdf, nh_comic_images, hr_comic_images
+from .helper.log import log
+from .helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, images_to_pdf, nh_comic_images, hr_comic_images
 
 
 nest_asyncio.apply()  # Apply nest_asyncio to allow nested event loops
