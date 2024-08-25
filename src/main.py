@@ -12,9 +12,6 @@ bot_token = os.getenv('bot_token')
 
 app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
-# Set the global parse mode to HTML
-app.set_parse_mode(enums.ParseMode.HTML)
-
 previous_message_ids = []
 
 @app.on_message(filters.command('start'))
@@ -48,7 +45,7 @@ async def handle_com(client, message):
             f"📌 <code>{item['chapter_url']}</code>"
         )
         image = item['img']
-        await client.send_photo(message.chat.id, image, caption=cap)
+        await client.send_photo(message.chat.id, image, caption=cap, parse_mode=enums.ParseMode.HTML)
 
 @app.on_message(filters.command('random'))
 async def handle_nh_random(client, message):
@@ -116,7 +113,8 @@ async def handle_singles(client, message):
             await client.send_photo(
                 message.chat.id,
                 image,
-                caption=f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}'
+                caption=f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}',
+                parse_mode=enums.ParseMode.HTML
             )
             response = 'LATEST MANGA RELEASES -> \n\n\n'
             n = 0
@@ -124,10 +122,10 @@ async def handle_singles(client, message):
                 n += 1
                 response += f"{chapter['title']} \n📌 <code>{chapter['url']}</code> \n\n"
                 if n % 10 == 0:
-                    await client.send_message(message.chat.id, response, parse_mode='HTML')
+                    await client.send_message(message.chat.id, response, parse_mode=enums.ParseMode.HTML)
                     response = ''
             if response:
-                await message.reply_text(response, parse_mode='HTML')
+                await message.reply_text(response, parse_mode=enums.ParseMode.HTML)
 
         if len(parts) == 3:
             images = apc_comic_images(url)
@@ -165,7 +163,7 @@ async def handle_search(client, message):
             f"🛑Genres\n{item['genres']}\n\n"
             f"Latest Chapter\n{item['chapter']}\n📌 <code>{item['chapter_url']}</code>"
         )
-        await client.send_photo(message.chat.id, item['image'], caption=caption, parse_mode='HTML')
+        await client.send_photo(message.chat.id, item['image'], caption=caption, parse_mode=enums.ParseMode.HTML)
 
     next_page_command = f"/s{n+1}_{query.replace('+', '_')}"
     await message.reply_text(next_page_command)
@@ -190,7 +188,8 @@ async def handle_multiple(client, message):
     await client.send_photo(
         message.chat.id,
         image,
-        caption=f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}'
+        caption=f'⭕{title}⭕\n\n📖Summary \n{summary} \n\n⭐Rating \n{rating}\n\n🛑Genres\n{genres}',
+        parse_mode=enums.ParseMode.HTML
     )
 
     chapters.reverse()
