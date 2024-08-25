@@ -8,10 +8,12 @@ from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, i
 
 nest_asyncio.apply()  # Apply nest_asyncio to allow nested event loops
 
-
+# Retrieve API ID, API Hash, and Bot Token from environment variables
+api_id = int(os.getenv('API_ID'))
+api_hash = os.getenv('API_HASH')
 bot_token = os.getenv('BOT_TOKEN')
 
-app = Client("my_bot", bot_token=bot_token)
+app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
 
 previous_message_ids = []
 
