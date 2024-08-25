@@ -5,3 +5,4 @@ requests
 beautifulsoup4
 pillow==9.0.0
 img2pdf
+git+https://github.com/alwaysmaysix/cloudscraper
