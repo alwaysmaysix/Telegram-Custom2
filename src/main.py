@@ -7,7 +7,7 @@ from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, i
 
 
 nest_asyncio.apply()  # Apply nest_asyncio to allow nested event loops
-api_id = int(os.getenv('api_id'))
+api_id = os.getenv('api_id')
 api_hash = os.getenv('api_hash')
 bot_token = os.getenv('bot_token')
 
@@ -35,9 +35,9 @@ async def help_command(client, message):
 
 @app.on_message(filters.command('new'))
 async def handle_com(client, message):
-    if message.message_id in previous_message_ids:
+    if message.id in previous_message_ids:
         return
-    previous_message_ids.append(message.message_id)
+    previous_message_ids.append(message.id)
     full_list = apc_home()
     for item in full_list:
         cap = (
@@ -51,9 +51,9 @@ async def handle_com(client, message):
 
 @app.on_message(filters.command('random'))
 async def handle_nh_random(client, message):
-    if message.message_id in previous_message_ids:
+    if message.id in previous_message_ids:
         return
-    previous_message_ids.append(message.message_id)
+    previous_message_ids.append(message.id)
 
     url = 'https://nhentai.to/random'
     try:
@@ -69,9 +69,9 @@ async def handle_nh_random(client, message):
 
 @app.on_message(filters.regex('https://hentairead.com/hentai/'))
 async def handle_hr(client, message):
-    if message.message_id in previous_message_ids:
+    if message.id in previous_message_ids:
         return
-    previous_message_ids.append(message.message_id)
+    previous_message_ids.append(message.id)
 
     url = message.text
     try:
@@ -87,9 +87,9 @@ async def handle_hr(client, message):
 
 @app.on_message(filters.regex('https://nhentai.to/g/'))
 async def handle_nh(client, message):
-    if message.message_id in previous_message_ids:
+    if message.id in previous_message_ids:
         return
-    previous_message_ids.append(message.message_id)
+    previous_message_ids.append(message.id)
 
     url = message.text
     images = nh_comic_images(url)
@@ -102,9 +102,9 @@ async def handle_nh(client, message):
 
 @app.on_message(filters.regex('https://allporncomic.com/porncomic/'))
 async def handle_singles(client, message):
-    if message.message_id in previous_message_ids:
+    if message.id in previous_message_ids:
         return
-    previous_message_ids.append(message.message_id)
+    previous_message_ids.append(message.id)
 
     url = message.text
     parts = url.replace('https://allporncomic.com/porncomic/', '').split('/')
@@ -171,9 +171,9 @@ async def handle_search(client, message):
 
 @app.on_message(filters.command('all'))
 async def handle_multiple(client, message):
-    if message.message_id in previous_message_ids:
+    if message.id in previous_message_ids:
         return
-    previous_message_ids.append(message.message_id)
+    previous_message_ids.append(message.id)
 
     text = message.text
     query = text.replace('/all', '', 1).strip().split()
