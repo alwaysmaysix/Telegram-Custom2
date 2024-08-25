@@ -1,18 +1,19 @@
 import os
 import asyncio
 import nest_asyncio
-from pyrogram import Client, filters
+from pyrogram import Client, filters, enums
 from helper.log import log
 from helper.api import apc_home, apc_comic_images, apc_comic_info, apc_search, images_to_pdf, nh_comic_images, hr_comic_images
-
 
 nest_asyncio.apply()  # Apply nest_asyncio to allow nested event loops
 api_id = os.getenv('api_id')
 api_hash = os.getenv('api_hash')
 bot_token = os.getenv('bot_token')
 
-
 app = Client("my_bot", api_id=api_id, api_hash=api_hash, bot_token=bot_token)
+
+# Set the global parse mode to HTML
+app.set_parse_mode(enums.ParseMode.HTML)
 
 previous_message_ids = []
 
@@ -47,7 +48,7 @@ async def handle_com(client, message):
             f"📌 <code>{item['chapter_url']}</code>"
         )
         image = item['img']
-        await client.send_photo(message.chat.id, image, caption=cap, parse_mode='HTML')
+        await client.send_photo(message.chat.id, image, caption=cap)
 
 @app.on_message(filters.command('random'))
 async def handle_nh_random(client, message):
